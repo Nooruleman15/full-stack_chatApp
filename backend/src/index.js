@@ -20,11 +20,15 @@ const __dirname = path.resolve();
 
 app.use(express.json());
 app.use(cookieParser());
+const corsOrigin = process.env.CORS_ORIGIN
+  ? (process.env.CORS_ORIGIN.includes(",") ? process.env.CORS_ORIGIN.split(",").map(url => url.trim()) : process.env.CORS_ORIGIN)
+  : (process.env.NODE_ENV === "production" 
+      ? ["http://localhost:8080", "http://localhost"] 
+      : "http://localhost:5173");
+
 app.use(
   cors({
-    origin: process.env.NODE_ENV === "production" 
-      ? ["http://localhost:8080", "http://localhost"] 
-      : "http://localhost:5173",
+    origin: corsOrigin,
     credentials: true,
   })
 );
