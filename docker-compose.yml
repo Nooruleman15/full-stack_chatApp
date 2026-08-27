@@ -1,28 +1,22 @@
 services:
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    image: noor009/chatpulse-frontend:latest
     ports:
       - "8080:80"
     depends_on:
       - backend
     networks:
       - chat-network
-    environment:
-      - BACKEND_URL=http://backend:5001
     restart: unless-stopped
 
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
+    image: noor009/chatpulse-backend:latest
     ports:
       - "5001:5001"
     depends_on:
       - mongo
     env_file:
-      - .env
+      - backend/.env
     networks:
       - chat-network
     restart: unless-stopped
@@ -31,9 +25,6 @@ services:
     image: mongo:latest
     ports:
       - "27017:27017"
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=admin
     volumes:
       - mongodb_data:/data/db
     networks:
@@ -46,9 +37,6 @@ networks:
 
 volumes:
   mongodb_data:
-
-
-
 
 
 
